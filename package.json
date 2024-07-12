@@ -2,7 +2,7 @@
   "name": "magnify",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://rajat-eng.github.io/magnify",
+  "homepage": "https://Rajat-eng.github.io/magnify",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
