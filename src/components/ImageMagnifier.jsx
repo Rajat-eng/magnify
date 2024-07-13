@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./ImageMagnifier.css";
 import PropTypes from "prop-types";
 const ImageMagnifier = ({
@@ -8,12 +8,13 @@ const ImageMagnifier = ({
   alt = "Image",
   magnifierHeight = 250,
   magnifierWidth = 250,
-  zoomLevel = 1.5,
+  initialZoomLevel = 1.5,
 }) => {
   const [showMagnifier, setShowMagnifier] = useState(false);
   const [[imgWidth, imgHeight], setSize] = useState([0, 0]);
   const [[x, y], setXY] = useState([0, 0]);
-
+  const [zoomLevel, setZoomLevel] = useState(initialZoomLevel);
+  const ref = useRef();
   const mouseEnter = (e) => {
     const el = e.currentTarget;
 
@@ -37,8 +38,22 @@ const ImageMagnifier = ({
     setXY([x, y]);
   };
 
+  const handleScroll = (e) => {
+    e.preventDefault();
+    setZoomLevel((prevZoom) => Math.max(1, prevZoom + e.deltaY * -0.01));
+  };
+
+  useEffect(() => {
+    const magnifierContainer = ref.current;
+    magnifierContainer.addEventListener("wheel", handleScroll);
+
+    return () => {
+      magnifierContainer.removeEventListener("wheel", handleScroll);
+    };
+  }, []);
+
   return (
-    <div className="img-magnifier-container">
+    <div className="img-magnifier-container" ref={ref}>
       <img
         src={src}
         width={width}
